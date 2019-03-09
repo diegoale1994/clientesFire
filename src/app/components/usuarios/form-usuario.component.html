@@ -1,0 +1,106 @@
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="100" [showSpinner]="true" [color]="'green'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"></ng-progress>
+<div class="container shadow">
+  <div class="row mt-5">
+    <div class="col-md-12 text-center">
+      <h1 class="display-3">{{url == 'nuevo' ? 'Crear':'Actualizar'}} Usuario</h1>
+    </div>
+  </div>
+  <form #forma="ngForm" class="mt-5 animated fadeIn fast" *ngIf="cliente">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="exampleFormControlInput1"><span class="lead">Nombre</span></label>
+          <input
+            [ngClass]="{'is-valid': !nombre.errors && nombre.touched,'is-invalid': nombre.errors && nombre.touched}"
+            [(ngModel)]="cliente.nombre" name="nombre" type="text" class="form-control" id="exampleFormControlInput1"
+            #nombre="ngModel" minlength="5" required>
+          <div *ngIf="nombre.errors?.required" class="invalid-feedback">
+            <span class="lead">Este campo es Requerido</span>
+          </div>
+          <div *ngIf="nombre.errors?.minlength" class="invalid-feedback">
+              <span class="lead">Este campo requiere por lo menos {{nombre.errors.minlength.requiredLength}} caracteres</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="exampleFormControlInput1"><span class="lead">Apellido</span></label>
+          <input [(ngModel)]="cliente.apellido"
+            [ngClass]="{'is-valid': !apellido.errors && apellido.touched,'is-invalid': apellido.errors && apellido.touched}"
+            type="text" class="form-control" name="apellido" id="exampleFormControlInput1" minlength="5" required
+            #apellido="ngModel">
+          <div *ngIf="apellido.errors?.required" class="invalid-feedback">
+            <span class="lead">Este campo es Requerido</span>
+          </div>
+          <div *ngIf="apellido.errors?.minlength" class="invalid-feedback">
+            <span class="lead">Este campo requiere por lo menos {{apellido.errors.minlength.requiredLength}} caracteres</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="exampleFormControlInput1"><span class="lead">Direccion de Email</span></label>
+          <input [(ngModel)]="cliente.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" name="email" type="email"
+            class="form-control" id="exampleFormControlInput1"
+            [ngClass]="{'is-valid': !email.errors && email.touched,'is-invalid': email.errors && email.touched}"
+            required #email="ngModel">
+          <div *ngIf="email.errors?.required" class="invalid-feedback">
+            <span class="lead">Este campo es Requerido</span>
+          </div>
+          <div *ngIf="email.errors?.pattern" class="invalid-feedback">
+            <span class="lead">No es un email Valido</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="exampleFormControlInput1"><span class="lead">Pais</span></label>
+          <input [ngClass]="{'is-valid': !pais.errors && pais.touched,'is-invalid': pais.errors && pais.touched}"
+            (focusout)="verificarPais()" name="pais" type="text" class="form-control" id="exampleFormControlInput1"
+            (keyup)="cargarPais(pais.value)" name="pais" [(ngModel)]="cliente.pais" autocomplete="off" #pais="ngModel" required>
+
+          <div *ngIf="pais.errors?.required" class="invalid-feedback">
+            <span class="lead">Este campo es Requerido</span>
+          </div>
+
+          <div class="mt-2">
+            <div class="list-group">
+              <a class="list-group-item list-group-item-action" *ngFor="let item of paises"
+                (click)="cliente.pais = item; paises.length = 0">{{item}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="exampleFormControlSelect1"><span class="lead">Profesion</span></label>
+      <select
+        [ngClass]="{'is-valid': !profesion.errors && profesion.touched,'is-invalid': profesion.errors && profesion.touched}"
+        [(ngModel)]="cliente.profesion" name="profesion" class="form-control" id="exampleFormControlSelect1"
+        #profesion="ngModel" required>
+        <option value="">Seleccione una profesion</option>
+        <option *ngFor="let profesion of profesiones" [value]="profesion"><span class="lead">{{profesion}}</span></option>
+      </select>
+    </div>
+
+    <div class="row text-center">
+      <div class="col-md-6">
+        <div class="form-group">
+          <div class="input-group">
+            <button type="submit" class="btn btn-outline-primary" [disabled]="!forma.valid" (click) = "guardarCambios();">
+              <span class="lead">{{url == 'nuevo' ? 'Crear':'Actualizar'}}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 text-right">
+          <button class="btn btn-outline-secondary" [routerLink] = "['/usuarios']">
+            <span class="lead">Volver</span></button>
+      </div>
+    </div>
+  </form>
+</div>

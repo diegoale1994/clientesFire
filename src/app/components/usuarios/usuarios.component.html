@@ -1,0 +1,61 @@
+<ng-progress [positionUsing]="'marginLeft'" [minimum]="0.15" [maximum]="1"
+[speed]="100" [showSpinner]="true" [color]="'green'" [trickleSpeed]="250" [thick]="false" [ease]="'linear'"></ng-progress>
+<div class="row container-fluid bg-light mb-3">
+<div class="col-md-12 text-center mt-5">
+   
+    <i class="fab fa-free-code-camp fa-6x"></i>
+</div>
+<div class="col-md-12 text-center">
+    <h1 class="display-3"><span>Usuarios</span></h1>
+</div>
+<div class="col-md-12 text-center">
+</div>
+</div>
+
+<div class="row shadow mb-5 container mx-auto" *ngIf="clientes">
+  <div class="col-md-8 text-center">
+      <p class="lead"><strong>Esta aplicacion esta conectada con Firebase</strong></p>
+  </div>
+  <div class="col-md-4 text-right">
+      <button class="text-right btn btn-outline-success" [routerLink] = "['nuevo']">Nuevo Usuario</button><br>
+  </div>
+    <table class="table table-hover animated fadeIn fast">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Email</th>
+            <th scope="col">Pais</th>
+            <th scope="col">Profesion</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let k of clientes | keys | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;">
+            <th scope="row">{{i+1}}</th>
+            <td>{{clientes[k].nombre}}</td>
+            <td>{{clientes[k].apellido}}</td>
+            <td>{{clientes[k].email}}</td>
+            <td>{{clientes[k].pais}}</td>
+            <td>{{clientes[k].profesion}}</td>
+            <td>
+              <button class="btn btn-outline-primary" [routerLink] = "['/usuarios',k]">Editar</button>&nbsp;
+              <button class="btn btn-outline-danger" (click) = "eliminarUsuario(k, clientes[k].nombre)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="row mx-auto">
+        <div class="col-md-12">
+            <pagination-controls 
+            (pageChange)="p = $event"
+            ></pagination-controls>
+        </div>
+      </div>
+     
+</div>
+
+<div class="alert alert-danger text-center" role="alert" *ngIf="!clientes && error">
+   Se ha producido un error: {{error.error}}
+  </div>
